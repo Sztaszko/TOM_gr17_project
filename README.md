@@ -18,13 +18,13 @@ obrazów medycznych, szeroką literaturę oraz bardzo dobre wyniki uzyskiwane na
 KiTS19.
 
 1. Charakterystyka zbioru danych - podział na zbiór treningowy i testowy, format
-danych, wymiary zdjęć itd. ​ 22.05.2020
-2. Implementacja architektury U-net i odpowiedniego preprocessingu ​ 30.05.2020
-3. Dobór odpowiednich parametrów sieci ​ 30.05.2020
-4. Implementacja walidacji wyników (DICE-score) ​ 08.06.2020
+danych, wymiary zdjęć itd. ​ 
+2. Implementacja architektury U-net i odpowiedniego preprocessingu ​ 
+3. Dobór odpowiednich parametrów sieci ​ 
+4. Implementacja walidacji wyników (DICE-score) ​ 
 5. Dobór sposobu wizualizacji uzyskanych wyników
 6. Bugfix
-7. Napisanie i oddanie raportu ​ 22.06.2020
+7. Napisanie i oddanie raportu ​ 
 
 Podział obowiązków:
 
