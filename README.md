@@ -11,8 +11,8 @@ Angelika Kiełbasa 296995
 Maja Kałwak 296993
 
 Stanisław Kaczmarski 296992
-P
-oniżej przedstawiono punktowy plan realizacji projektu. Wybranym algorytmem
+
+Poniżej przedstawiono punktowy plan realizacji projektu. Wybranym algorytmem
 segmentującym jest sieć neuronowa U-net 2D ​ ze względu na jej pierwotny cel segmentacji
 obrazów medycznych, szeroką literaturę oraz bardzo dobre wyniki uzyskiwane na danych
 KiTS19.
