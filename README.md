@@ -1,4 +1,4 @@
-# TOM_gr17_project
+# TOM Grupa 17
 
 Projekt realizowany w ramach przedmiotu Techniki Obrazowania Medycznego 2019/2020
 
