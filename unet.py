@@ -13,9 +13,6 @@ Original file is located at
 from tensorflow.keras.layers import Input, Conv2D, Dropout, MaxPooling2D, concatenate, Conv2DTranspose
 import tensorflow as tf
 
-IMG_WIDTH=512
-IMG_HEIGHT=512
-IMG_CHANNELS=3
 
 #build the model
 def build_model(inputs):
@@ -96,9 +93,13 @@ def dice_coef(y_true, y_pred):
   return (2.*intersection+1.)/(K.sum(y_true_f)+K.sum(y_pred_f)+1)
 
 def dice_coef_loss(y_true, y_pred):
-  return -dice_coef(y_true, y_pred)
+  return 1-dice_coef(y_true, y_pred)
 
 
+
+
+
+"""
 inputs = Input((IMG_WIDTH,IMG_HEIGHT,IMG_CHANNELS))
 inputs_float=tf.keras.layers.Lambda(lambda x: x/255)(inputs)
 outputs=build_model(inputs_float)
@@ -110,7 +111,9 @@ model.summary()
 #adding checkpoints
 checkpointer=tf.keras.callbacks.ModelCheckpoint('/tmp/model1.h5', verbose=1, save_best_only=True)
 
-callbacks=[tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
+callbacks=[tf.keras.callbacks.EarlyStopping(patience=3, monitor='val_loss'),
            tf.keras.callbacks.TensorBoard(log_dir='/tmp/logs')]
 
 results=model.fit(X,Y, validation_split=0.1, batch_size=16, epochs=25, callbacks=callbacks)
+
+"""
