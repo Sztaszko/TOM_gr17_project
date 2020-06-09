@@ -1,0 +1,4 @@
+Ogólny schemat rozwiazania wygląda poprawnie. To co widać na wykresie to overfitting (zakłądając, że to wykres uśrednionego Dice dla zbioru walidacyjnego).
+Nie jest to nic dziwnego przy tak małym zbiorze danych - można się tego pozbyć stosując większy zbiór treningowy oraz dokonując augmentacji każdego przekroju przed dokonaniem segmentacji.
+
+Proszę skomentować w jaki sposób zostaną przedstawione wyniki (w sposób ilościowy).
