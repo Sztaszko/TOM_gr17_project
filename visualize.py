@@ -12,9 +12,7 @@ import argparse
 
 import scipy.misc
 import numpy as np
-from imageio import imwrite
 
-from starter_code.utils import load_case
 
 
 # Constants
@@ -24,6 +22,26 @@ DEFAULT_HU_MAX = 512
 DEFAULT_HU_MIN = -512
 DEFAULT_OVERLAY_ALPHA = 0.3
 DEFAULT_PLANE = "axial"
+
+def standardize(vol, HU_max=512, HU_min=-512):
+    vol[vol > HU_max] = HU_max
+    vol[vol < HU_min] = HU_min
+
+    conversion_factor = 1.0 / (HU_max - HU_min)
+    conversion_intercept = 0.5
+    vol = vol * conversion_factor + conversion_intercept
+
+    assert np.amax(vol) <= 1, "Max above one after normalization."
+    assert np.amin(vol) >= 0, "Min below zero after normalization."
+
+    return vol
+
+def silence_imageio_warning(*args, **kwargs):
+    pass
+
+def check_path(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 def hu_to_grayscale(volume, hu_min, hu_max):
     # Clip at max and min values if specified
