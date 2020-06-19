@@ -21,14 +21,15 @@ def check_dir(path):
     path.mkdir()
 
 
+
 def preprocess_vol(path):
   seed = 1
-  datagen = ImageDataGenerator(rescale = 1./255)
-  generator = datagen.flow_from_directory(directory = path, target_size = (256,256),color_mode='grayscale', batch_size = 1, class_mode = None, seed = seed)
+  datagen = ImageDataGenerator(rescale = 1./255, rotation_range = 5, width_shift_range = .05, height_shift_range = .05)
+  generator = datagen.flow_from_directory(directory = path, target_size = (512,512),color_mode='grayscale', batch_size = 1, class_mode = None, seed = seed)
   return generator
 
 def preprocess_segm(path):
   seed = 1
-  datagen = ImageDataGenerator()
-  generator = datagen.flow_from_directory(directory = path, target_size = (256,256), color_mode='grayscale', batch_size = 1, class_mode = 'categorical', seed = seed)
+  datagen = ImageDataGenerator(rescale = 1./255, rotation_range = 5, width_shift_range = .05, height_shift_range = .05)
+  generator = datagen.flow_from_directory(directory = path, target_size = (512,512), color_mode='grayscale', batch_size = 1, class_mode = None, seed = seed)
   return generator
