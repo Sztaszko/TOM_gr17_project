@@ -10,7 +10,7 @@ Original file is located at
 """
 @author: Sztaszko
 """
-from tensorflow.keras.layers import Input, Conv2D, Dropout, MaxPooling2D, concatenate, Conv2DTranspose
+from tensorflow.keras.layers import Input, Conv2D, Dropout, MaxPooling2D, concatenate, Conv2DTranspose, Dense
 import tensorflow as tf
 
 
@@ -21,7 +21,7 @@ def build_model(inputs):
   #convolutional layers
   #Conv2D(filters, seed, activation, kernel_init)(in)  
   #he_normal - normal distribution (centered on 0)
-  #padding = same - output img has the same dimentions
+  #padding = same -> output img has the same dimentions
   #in have to be float
   c1 = Conv2D(16,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(inputs)
   c1 = Dropout(0.1)(c1)
@@ -32,7 +32,6 @@ def build_model(inputs):
   c2 = Dropout(0.1)(c2)
   c2 = Conv2D(32,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(c2)
   p2 = MaxPooling2D((2,2))(c2) 
-
 
   c3 = Conv2D(64,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(p2)
   c3 = Dropout(0.2)(c3)
@@ -50,12 +49,18 @@ def build_model(inputs):
   p5 = MaxPooling2D((2,2))(c5) 
 
   #---------expansive path----------
-  u6 = Conv2DTranspose(128, (2,2), strides=(2,2), padding='same')(c5)
+
+  u6x = Conv2DTranspose(256, (2,2), strides=(2,2), padding='same')(p5)
+  u6x = concatenate([u6x,c5])
+  c6x = Conv2D(256,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(u6x)
+  c6x = Dropout(0.2)(c6x)
+  c6x = Conv2D(256,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(c6x)
+
+  u6 = Conv2DTranspose(128, (2,2), strides=(2,2), padding='same')(c6x)
   u6 = concatenate([u6,c4])
   c6 = Conv2D(128,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(u6)
   c6 = Dropout(0.2)(c6)
   c6 = Conv2D(128,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(c6)
-
 
   u7 = Conv2DTranspose(64, (2,2), strides=(2,2), padding='same')(c6)
   u7 = concatenate([u7,c3])
@@ -63,15 +68,11 @@ def build_model(inputs):
   c7 = Dropout(0.2)(c7)
   c7 = Conv2D(64,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(c7)
 
-
-
   u8 = Conv2DTranspose(32, (2,2), strides=(2,2), padding='same')(c7)
   u8 = concatenate([u8,c2])
   c8 = Conv2D(32,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(u8)
   c8 = Dropout(0.1)(c8)
   c8 = Conv2D(32,(3,3),activation='relu', kernel_initializer='he_normal', padding='same')(c8)
-
-
 
   u9 = Conv2DTranspose(16, (2,2), strides=(2,2), padding='same')(c8)
   u9 = concatenate([u9,c1], axis=3)
@@ -95,25 +96,3 @@ def dice_coef(y_true, y_pred):
 def dice_coef_loss(y_true, y_pred):
   return 1-dice_coef(y_true, y_pred)
 
-
-
-
-
-"""
-inputs = Input((IMG_WIDTH,IMG_HEIGHT,IMG_CHANNELS))
-inputs_float=tf.keras.layers.Lambda(lambda x: x/255)(inputs)
-outputs=build_model(inputs_float)
-model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
-
-model.compile(optimizer='adam', loss=dice_coef_loss, metrics=['dice_coef'])
-model.summary()
-
-#adding checkpoints
-checkpointer=tf.keras.callbacks.ModelCheckpoint('/tmp/model1.h5', verbose=1, save_best_only=True)
-
-callbacks=[tf.keras.callbacks.EarlyStopping(patience=3, monitor='val_loss'),
-           tf.keras.callbacks.TensorBoard(log_dir='/tmp/logs')]
-
-results=model.fit(X,Y, validation_split=0.1, batch_size=16, epochs=25, callbacks=callbacks)
-
-"""
